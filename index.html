@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Sleep Tracker" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>Sleep Tracker</title>
+  <link rel="stylesheet" href="src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <span class="header-icon">&#9790;</span>
+        <h1>Sleep Tracker</h1>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Quick tap buttons -->
+      <section class="tap-section card">
+        <div class="tap-buttons">
+          <button id="btn-sleep" class="tap-btn sleep-btn" onclick="tapSleep()">
+            <span class="tap-icon">&#9790;</span>
+            <span class="tap-label">Sleep now</span>
+            <span class="tap-sub" id="sleep-sub">Tap when going to bed</span>
+          </button>
+          <button id="btn-wake" class="tap-btn wake-btn" onclick="tapWake()" disabled>
+            <span class="tap-icon">&#9728;</span>
+            <span class="tap-label">Wake up</span>
+            <span class="tap-sub" id="wake-sub">Tap when you rise</span>
+          </button>
+        </div>
+        <p id="tap-status" class="tap-status"></p>
+      </section>
+
+      <!-- Metrics -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-label">Avg sleep</span>
+          <span class="metric-value" id="avg-sleep">—</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Last night</span>
+          <span class="metric-value" id="last-sleep">—</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Consistency</span>
+          <span class="metric-value" id="consistency">—</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Days logged</span>
+          <span class="metric-value" id="days-logged">0</span>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab active" id="tab-log" onclick="showTab('log')">Log</button>
+        <button class="tab" id="tab-week" onclick="showTab('week')">Weekly</button>
+        <button class="tab" id="tab-chart" onclick="showTab('chart')">Trend</button>
+        <button class="tab" id="tab-manual" onclick="showTab('manual')">Manual</button>
+      </div>
+
+      <!-- Log pane -->
+      <div id="pane-log" class="pane card">
+        <div id="log-list"><p class="empty-state">No entries yet. Tap Sleep now to begin.</p></div>
+      </div>
+
+      <!-- Weekly pane -->
+      <div id="pane-week" class="pane card" style="display:none">
+        <p class="section-label">This week</p>
+        <div id="week-view"></div>
+        <div class="divider"></div>
+        <p class="section-label">Consistency score</p>
+        <p id="consistency-detail" class="body-text">Log at least 3 nights to see your score.</p>
+      </div>
+
+      <!-- Chart pane -->
+      <div id="pane-chart" class="pane" style="display:none">
+        <div class="card">
+          <p class="section-label">Last 14 nights</p>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot good-bg"></span>Good (7–9h)</span>
+            <span class="legend-item"><span class="legend-dot ok-bg"></span>Short</span>
+            <span class="legend-item"><span class="legend-dot bad-bg"></span>Poor</span>
+          </div>
+          <div style="position:relative;height:220px">
+            <canvas id="sleep-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manual entry pane -->
+      <div id="pane-manual" class="pane card" style="display:none">
+        <p class="section-label">Manual entry</p>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" id="m-date" class="form-input" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Bedtime</label>
+            <input type="time" id="m-bed" class="form-input" value="23:00" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Wake time</label>
+            <input type="time" id="m-wake" class="form-input" value="07:00" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes (optional)</label>
+          <textarea id="m-notes" class="form-input form-textarea" placeholder="e.g. woke up at 3am, took melatonin..."></textarea>
+        </div>
+        <button class="save-btn" onclick="manualSave()">Save entry</button>
+        <p id="manual-msg" class="save-msg"></p>
+      </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
